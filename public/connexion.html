@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Connexion - Boulangerie Lille</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="composants.css">
+		<link rel="icon" type="image/png" href="images/logo.png">
+	</head>
+
+	<body>
+
+		<div class="navbar">
+			<ul>
+				<li><img src="images/logo.png"></li>
+				<li><a href="index.html">Accueil</a></li>
+				<li><a href="portfolio.html">Portfolio</a></li>
+				<li><a href="boutique.html">Boutique</a></li>
+				<li><a href="contact.html">Contact</a></li>
+				<li><a href="connexion.html" id="lien-compte">Connexion</a></li>
+				<li><a href="securite.html">Sécurité</a></li>
+			</ul>
+		</div>
+
+		<main class="contenu">
+			<h1>Connexion</h1>
+			<form class="formulaire" id="formulaire-connexion">
+				<label>Email
+					<input type="email" name="email" required autocomplete="username">
+				</label>
+				<label>Mot de passe
+					<input type="password" name="mot_de_passe" required autocomplete="current-password">
+				</label>
+				<button class="bouton" type="submit">Se connecter</button>
+				<p class="resultat" id="resultat-connexion" role="status"></p>
+			</form>
+
+			<h2>Créer un compte</h2>
+			<form class="formulaire" id="formulaire-inscription">
+				<label>Email
+					<input type="email" name="email" required maxlength="254" autocomplete="username">
+				</label>
+				<label>Mot de passe (10 caractères minimum)
+					<input type="password" name="mot_de_passe" required minlength="10" maxlength="200" autocomplete="new-password">
+				</label>
+				<button class="bouton" type="submit">Créer mon compte</button>
+				<p class="resultat" id="resultat-inscription" role="status"></p>
+			</form>
+		</main>
+
+		<script src="js/commun.js"></script>
+		<script src="js/connexion.js"></script>
+
+	</body>
+</html>

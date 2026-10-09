@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Boutique - Boulangerie Lille</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="composants.css">
+		<link rel="icon" type="image/png" href="images/logo.png">
+	</head>
+
+	<body>
+
+		<div class="navbar">
+			<ul>
+				<li><img src="images/logo.png"></li>
+				<li><a href="index.html">Accueil</a></li>
+				<li><a href="portfolio.html">Portfolio</a></li>
+				<li><a href="boutique.html">Boutique</a></li>
+				<li><a href="contact.html">Contact</a></li>
+				<li><a href="connexion.html" id="lien-compte">Connexion</a></li>
+				<li><a href="securite.html">Sécurité</a></li>
+			</ul>
+		</div>
+
+		<main class="contenu">
+			<h1>Boutique</h1>
+			<ul class="produits" id="produits"></ul>
+
+			<h2>Mon panier</h2>
+			<ul class="panier" id="panier"></ul>
+			<p><strong id="total"></strong></p>
+			<button class="bouton" id="commander" type="button" disabled>Commander</button>
+			<p class="resultat" id="resultat" role="status"></p>
+		</main>
+
+		<script src="js/commun.js"></script>
+		<script src="js/boutique.js"></script>
+
+	</body>
+</html>

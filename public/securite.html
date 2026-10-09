@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Sécurité du site - Boulangerie Lille</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="composants.css">
+		<link rel="icon" type="image/png" href="images/logo.png">
+	</head>
+
+	<body>
+
+		<div class="navbar">
+			<ul>
+				<li><img src="images/logo.png"></li>
+				<li><a href="index.html">Accueil</a></li>
+				<li><a href="portfolio.html">Portfolio</a></li>
+				<li><a href="boutique.html">Boutique</a></li>
+				<li><a href="contact.html">Contact</a></li>
+				<li><a href="connexion.html" id="lien-compte">Connexion</a></li>
+				<li><a href="securite.html">Sécurité</a></li>
+			</ul>
+		</div>
+
+		<main class="contenu">
+			<h1>Comment ce site est protégé</h1>
+			<p>Page d'apprentissage, à retirer avant une mise en ligne. Pour chaque protection : le risque, où lire le code, et comment constater qu'elle fonctionne.</p>
+			<p>Idée à retenir : <strong>tout ce qui vient du navigateur peut avoir été modifié</strong> (formulaire, cookie, adresse). Le serveur revérifie donc tout lui-même.</p>
+			<p>Les comptes de test (un admin, deux clients) sont créés dans <code>db.js</code>.</p>
+
+			<section class="notion">
+				<h2>1. Seul le dossier public/ est accessible</h2>
+				<p><strong>Risque :</strong> qu'un visiteur télécharge le code du serveur ou le fichier de la base.</p>
+				<p><strong>Code :</strong> <code>serveur.js</code>, ligne <code>express.static</code>.</p>
+				<p><strong>Vérifier :</strong> ouvre <code>/serveur.js</code> ou <code>/data/boulangerie.db</code> dans le navigateur : introuvable.</p>
+			</section>
+
+			<section class="notion">
+				<h2>2. Validation côté serveur (contact)</h2>
+				<p><strong>Risque :</strong> les <code>required</code> du HTML se contournent, on peut envoyer n'importe quoi au serveur sans passer par la page.</p>
+				<p><strong>Code :</strong> <code>routes.js</code>, route <code>/api/contact</code>.</p>
+				<p><strong>Vérifier :</strong> dans les outils du navigateur (F12), retire l'attribut <code>required</code> d'un champ puis envoie le formulaire vide : le serveur refuse quand même.</p>
+			</section>
+
+			<section class="notion">
+				<h2>3. Le texte des visiteurs est affiché comme du texte</h2>
+				<p><strong>Risque :</strong> si un message contenant des balises HTML était inséré tel quel dans la page des messages, le navigateur de la boulangerie l'interpréterait (faille dite XSS).</p>
+				<p><strong>Code :</strong> <code>echapperHtml</code> dans <code>outils.js</code>, utilisée dans la route <code>/admin/messages</code>. Côté navigateur, on utilise <code>textContent</code> et jamais <code>innerHTML</code>.</p>
+				<p><strong>Vérifier :</strong> envoie un message contenant <code>&lt;b&gt;bonjour&lt;/b&gt;</code>, puis connecte-toi en admin et ouvre les messages : les balises s'affichent telles quelles, le texte n'est pas en gras.</p>
+			</section>
+
+			<section class="notion">
+				<h2>4. Anti-spam</h2>
+				<p><strong>Risque :</strong> des robots qui remplissent le formulaire en boucle.</p>
+				<p><strong>Code :</strong> champ piège <code>site_web</code> dans <code>contact.html</code>, et <code>limiteContact</code> dans <code>routes.js</code>.</p>
+				<p><strong>Vérifier :</strong> envoie quatre messages de suite : le quatrième est refusé pendant dix minutes.</p>
+			</section>
+
+			<section class="notion">
+				<h2>5. Mots de passe hachés</h2>
+				<p><strong>Risque :</strong> si la base fuit un jour, tous les mots de passe des clients avec, et beaucoup de gens réutilisent le même partout.</p>
+				<p><strong>Code :</strong> <code>hacherMotDePasse</code> et <code>verifierMotDePasse</code> dans <code>outils.js</code>.</p>
+				<p><strong>Vérifier :</strong> lance <code>npm run voir-db</code> : la colonne <code>hash</code> ne permet pas de retrouver les mots de passe.</p>
+			</section>
+
+			<section class="notion">
+				<h2>6. Requêtes SQL préparées</h2>
+				<p><strong>Risque :</strong> si on fabriquait une requête en collant du texte tapé par le visiteur, il pourrait y glisser du SQL et lire ou modifier la base (injection SQL).</p>
+				<p><strong>Code :</strong> partout dans <code>routes.js</code>, les valeurs passent par des <code>?</code> remplis par la base.</p>
+				<p><strong>Vérifier :</strong> essaie de te connecter avec une apostrophe dans l'email : simple « email ou mot de passe incorrect », aucune erreur technique.</p>
+			</section>
+
+			<section class="notion">
+				<h2>7. Session côté serveur, cookie protégé</h2>
+				<p><strong>Risque :</strong> qu'on se fasse passer pour un autre client en modifiant ou en volant son cookie.</p>
+				<p><strong>Code :</strong> <code>ouvrirSession</code> et <code>cookieSession</code> dans <code>routes.js</code>.</p>
+				<p><strong>Vérifier :</strong> connecte-toi, F12, onglet Application puis Cookies : <code>sid</code> est une longue valeur aléatoire, marquée HttpOnly. Tape <code>document.cookie</code> dans la console : il n'apparaît pas.</p>
+			</section>
+
+			<section class="notion">
+				<h2>8. Tentatives de connexion limitées</h2>
+				<p><strong>Risque :</strong> deviner un mot de passe en en essayant des milliers, ou découvrir quels emails sont inscrits.</p>
+				<p><strong>Code :</strong> <code>limiteConnexion</code> et le message unique dans la route <code>/api/connexion</code>.</p>
+				<p><strong>Vérifier :</strong> trompe-toi six fois de mot de passe : le compte est bloqué un quart d'heure. Le message est le même pour un email inconnu.</p>
+			</section>
+
+			<section class="notion">
+				<h2>9. Le prix est calculé par le serveur</h2>
+				<p><strong>Risque :</strong> si le serveur faisait confiance au prix envoyé par la page, un client pourrait le changer avant de commander.</p>
+				<p><strong>Code :</strong> route <code>POST /api/commandes</code> dans <code>routes.js</code>, et <code>boutique.js</code> qui n'envoie que les identifiants et les quantités.</p>
+				<p><strong>Vérifier :</strong> F12, onglet Réseau, passe une commande et regarde ce qui est envoyé : aucun prix.</p>
+			</section>
+
+			<section class="notion">
+				<h2>10. Chacun ne voit que ses commandes</h2>
+				<p><strong>Risque :</strong> lire la commande d'un autre client en changeant le numéro dans l'adresse.</p>
+				<p><strong>Code :</strong> route <code>/api/commandes/:id</code>, la condition <code>AND user_id = ?</code>. Même principe pour <code>/admin/messages</code>, réservée au rôle admin.</p>
+				<p><strong>Vérifier :</strong> connecté avec un compte client, ouvre <code>/api/commandes/1</code> puis <code>/api/commandes/2</code> : une seule des deux s'affiche. Ouvre <code>/admin/messages</code> : refusé.</p>
+			</section>
+
+			<section class="notion">
+				<h2>11. En-têtes de sécurité et requêtes venant d'autres sites</h2>
+				<p><strong>Risque :</strong> un script étranger exécuté dans la page, ou un autre site qui ferait agir le navigateur d'un client connecté à sa place (CSRF).</p>
+				<p><strong>Code :</strong> en-têtes dans <code>serveur.js</code>, contrôle de l'origine au début de <code>routes.js</code>, <code>SameSite</code> sur le cookie.</p>
+				<p><strong>Vérifier :</strong> F12, onglet Réseau, clique sur une page et regarde ses en-têtes de réponse.</p>
+			</section>
+
+			<section class="notion">
+				<h2>Ce qu'il resterait à faire avant une vraie mise en ligne</h2>
+				<ul>
+					<li><strong>HTTPS</strong> obligatoire (certificat fourni par l'hébergeur), avec <code>NODE_ENV=production</code> pour activer le cookie <code>Secure</code>.</li>
+					<li><strong>Paiement</strong> : confié à un prestataire (Stripe, PayPlug, SumUp…). Le site ne voit jamais de numéro de carte.</li>
+					<li><strong>Email de confirmation</strong> à l'inscription et « mot de passe oublié » par lien à usage unique.</li>
+					<li><strong>RGPD</strong> : mentions légales, politique de confidentialité, durée de conservation, suppression sur demande.</li>
+					<li><strong>Secrets</strong> (clés, mots de passe d'email) dans un fichier <code>.env</code> jamais publié.</li>
+					<li><strong>Sessions et limites</strong> enregistrées en base : ici elles sont en mémoire et s'effacent au redémarrage.</li>
+					<li><strong>Mises à jour</strong> régulières (<code>npm audit</code>) et <strong>sauvegardes</strong> de la base.</li>
+					<li>Supprimer les comptes de test et cette page.</li>
+				</ul>
+			</section>
+		</main>
+
+		<script src="js/commun.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Contact - Boulangerie Lille</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="composants.css">
+		<link rel="icon" type="image/png" href="images/logo.png">
+	</head>
+
+	<body>
+
+		<div class="navbar">
+			<ul>
+				<li><img src="images/logo.png"></li>
+				<li><a href="index.html">Accueil</a></li>
+				<li><a href="portfolio.html">Portfolio</a></li>
+				<li><a href="boutique.html">Boutique</a></li>
+				<li><a href="contact.html">Contact</a></li>
+				<li><a href="connexion.html" id="lien-compte">Connexion</a></li>
+				<li><a href="securite.html">Sécurité</a></li>
+			</ul>
+		</div>
+
+		<main class="contenu">
+			<h1>Nous contacter</h1>
+
+			<!-- Les required / maxlength aident le visiteur, mais la vraie
+			     vérification est faite par le serveur (routes.js). -->
+			<form class="formulaire" id="formulaire-contact">
+				<label>Nom
+					<input type="text" name="nom" required maxlength="80" autocomplete="name">
+				</label>
+				<label>Email
+					<input type="email" name="email" required maxlength="254" autocomplete="email">
+				</label>
+				<label>Message
+					<textarea name="message" rows="6" required minlength="10" maxlength="2000"></textarea>
+				</label>
+
+				<!-- Champ piège : caché aux humains, les robots le remplissent. -->
+				<div class="piege" aria-hidden="true">
+					<label>Ne pas remplir
+						<input type="text" name="site_web" tabindex="-1" autocomplete="off">
+					</label>
+				</div>
+
+				<button class="bouton" type="submit">Envoyer</button>
+				<p class="resultat" id="resultat" role="status"></p>
+			</form>
+
+			<p>Vos nom, email et message servent uniquement à vous répondre.</p>
+		</main>
+
+		<script src="js/commun.js"></script>
+		<script src="js/contact.js"></script>
+
+	</body>
+</html>

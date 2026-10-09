@@ -1,0 +1,13 @@
+{
+  "name": "boulangerie-lille",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site de boulangerie pour apprendre à sécuriser un formulaire de contact, des comptes et une boutique",
+  "scripts": {
+    "start": "node serveur.js",
+    "voir-db": "node outils/voir-db.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

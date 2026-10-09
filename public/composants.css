@@ -1,0 +1,118 @@
+/* Styles des formulaires, de la boutique et des pages de compte.
+   Ton style.css reste séparé : celui-ci ne fait que le compléter. */
+
+.contenu {
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 16px;
+	font-family: system-ui, sans-serif;
+	line-height: 1.5;
+}
+
+.formulaire {
+	display: grid;
+	gap: 12px;
+	max-width: 480px;
+	margin-bottom: 32px;
+}
+
+.formulaire label {
+	display: grid;
+	gap: 4px;
+	font-weight: 600;
+}
+
+.formulaire input,
+.formulaire textarea {
+	padding: 8px;
+	border: 1px solid #999;
+	border-radius: 4px;
+	font: inherit;
+}
+
+.bouton {
+	padding: 8px 16px;
+	border: 0;
+	border-radius: 4px;
+	background-color: blue;
+	color: white;
+	font: inherit;
+	cursor: pointer;
+	justify-self: start;
+}
+
+.bouton:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.lien {
+	color: blue;
+	text-decoration: underline;
+}
+
+/* Champ piège anti-robots : sorti de l'écran, donc invisible pour un humain. */
+.piege {
+	position: absolute;
+	left: -9999px;
+}
+
+.resultat {
+	min-height: 1.5em;
+	font-weight: 600;
+}
+
+.resultat.succes {
+	color: #1a7f37;
+}
+
+.resultat.erreur {
+	color: #b3261e;
+}
+
+.carte {
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	padding: 12px;
+	margin-bottom: 12px;
+}
+
+/* Conserve les retours à la ligne du message tel qu'il a été écrit. */
+.message-recu {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.produits {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 16px;
+	padding: 0;
+	list-style: none;
+}
+
+.produit img {
+	display: block;
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.produit h3 {
+	margin: 8px 0 4px;
+}
+
+.panier li {
+	margin-bottom: 4px;
+}
+
+.notion h2 {
+	margin-bottom: 4px;
+}
+
+.notion code {
+	background-color: #eee;
+	padding: 1px 4px;
+	border-radius: 3px;
+}
